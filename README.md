@@ -130,6 +130,65 @@ type Mutation {
 }
 ```
 
+### Importing with globs
+
+You can also import every `.graphql` files in your project using globs patterns.
+
+Assume the following directory structure:
+
+```
+.
+├── a.graphql
+├── b.graphql
+```
+
+`a.graphql`
+
+```graphql
+type Query {
+  first: String!
+  second: Float
+}
+```
+
+`b.graphql`
+
+```graphql
+type Book {
+  id: ID!
+  name: String
+  read: Boolean!
+}
+
+type Query {
+  book(id: ID!): Book
+}
+
+type Mutation {
+  readBook(id: ID!): Book
+}
+```
+
+Running `console.log(importSchema('*.graphql'))` produces the following output:
+
+```graphql
+type Query {
+  first: String!
+  second: Float
+  book(id: ID!): Book
+}
+
+type Mutation {
+  readBook(id: ID!): Book
+}
+
+type Book {
+  id: ID!
+  name: String
+  read: Boolean!
+}
+```
+
 Please refer to [`src/index.test.ts`](https://github.com/graphcool/graphql-import/blob/master/src/index.test.ts) for more examples.
 
 ## Development

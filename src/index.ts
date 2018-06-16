@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import * as glob from 'glob'
 import {
   DefinitionNode,
   parse,
@@ -26,6 +27,11 @@ export interface RawModule {
 const rootFields = ['Query', 'Mutation', 'Subscription']
 
 const read = (schema: string, schemas?: { [key: string]: string }) => {
+  if (schema.includes('*')) {
+    return glob.sync(schema)
+      .map(filePath => fs.readFileSync(filePath, { encoding: 'utf8' }))
+      .join('\n')
+  }
   if (isFile(schema)) {
     return fs.readFileSync(schema, { encoding: 'utf8' })
   }

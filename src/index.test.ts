@@ -671,6 +671,27 @@ type Shared {
   t.is(importSchema('fixtures/global/a.graphql', { shared }), expectedSDL)
 })
 
+test('glob import', t => {
+  const expectedSDL = `\
+type Query {
+  first: String!
+  second: Float
+  book(id: ID!): Book
+}
+
+type Mutation {
+  readBook(id: ID!): Book
+}
+
+type Book {
+  id: ID!
+  name: String
+  read: Boolean!
+}
+`
+  t.is(importSchema('fixtures/import-glob/*.graphql'), expectedSDL)
+})
+
 test('missing type on type', t => {
   const err = t.throws(
     () => importSchema('fixtures/type-not-found/a.graphql'),
